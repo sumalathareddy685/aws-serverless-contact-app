@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AWS Serverless Contact Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; }
+    input, textarea, button { width: 100%; margin: 10px 0; padding: 10px; box-sizing: border-box; }
+    button { background-color: #ff9900; color: white; border: none; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>Send a Message to AWS</h2>
+  <input type="text" id="name" placeholder="Your Name" required />
+  <textarea id="message" rows="4" placeholder="Your Message" required></textarea>
+  <button onclick="sendMessage()">Submit to DynamoDB</button>
+  <p id="response" style="color: green; font-weight: bold;"></p>
+
+  <script>
+    async function sendMessage() {
+      const apiUrl = "PASTE_YOUR_INVOKE_URL_HERE/submit";
+      const name = document.getElementById("name").value;
+      const message = document.getElementById("message").value;
+
+      document.getElementById("response").innerText = "Sending...";
+
+      const res = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name, message: message })
+      });
+
+      const data = await res.json();
+      document.getElementById("response").innerText = data.status || "Sent!";
+    }
+  </script>
+</body>
+</html>
